@@ -1,6 +1,7 @@
 // import { PedidoStatus } from '@prisma/client';
 export enum PedidoStatus {
   PENDIENTE = 'PENDIENTE',
+  PAGADO = 'PAGADO',
   ENTREGADO = 'ENTREGADO',
   CANCELADO = 'CANCELADO'
 }
@@ -8,6 +9,7 @@ export enum PedidoStatus {
 
 export const PedidoStatusList = [
   PedidoStatus.PENDIENTE,
+  PedidoStatus.PAGADO,
   PedidoStatus.ENTREGADO,
   PedidoStatus.CANCELADO,
 ]
