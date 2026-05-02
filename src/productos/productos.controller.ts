@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { catchError, firstValueFrom } from 'rxjs';
 import { PaginationDto } from 'src/common/dto';
 import { NATS_SERVICE } from 'src/config';
 import { CreateProductoDto, UpdateProductoDto } from './dto';
+import { AuthGuard } from 'src/auth/guards';
 
 //! MUY IMPORTANTE, lo que acompaña al CMD, DEBE SI O SI ESTAR EN EL MICROSERVICIO CON EL QUE NOS VAMOS A CONECTAR, EJEMPLO
 /*
@@ -34,6 +35,13 @@ export class ProductosController {
       );
   }
 
+  //! IMPORTANTE, PARA OBTENER PRODUCTOS, COLOCO EL GUARDIA DE AUTENTICACION, PARA QUE SE PUEDE ACCEDER SOLO SI ESTÁ AUTENTICADO,
+  // EL GUARDIA SE ENCARGA DE VERIFICAR EL TOKEN. SI NO TIENE ACCESO RETORNA UN 401,
+  // SI TIENE ACCESO, ENTONCES SE EJECUTA EL CONTROLADOR Y SE OBTIENEN LOS PRODUCTOS,
+  // PERO SI NO COLOCO EL GUARDIA, CUALQUIER PERSONA PUEDE OBTENER LOS PRODUCTOS SIN NECESIDAD DE ESTAR AUTENTICADO,
+  // ASI QUE ES MUY IMPORTANTE COLOCAR EL GUARDIA DE AUTENTICACION EN LOS CONTROLADORES QUE QUIERO PROTEGER, EN ESTE CASO EL DE OBTENER PRODUCTOS,
+  // PERO SI QUIERO PROTEGER OTROS CONTROLADORES TAMBIEN DEBO COLOCAR EL GUARDIA EN ESOS CONTROLADORES.
+  @UseGuards(AuthGuard) // VERIFICA SI TIENE TOKEN VALIDO, VA AL MICROSERVICIO DE AUTH PARA VERIFICAR EL TOKEN, SI EL TOKEN ES VALIDO, ENTONCES PERMITE EL ACCESO, SI NO ES VALIDO, RETORNA UN 401
   @Get()
   async obtenerProductos(@Query() paginationDto: PaginationDto) {
     // .send envia una peticion y espera la respuesta
