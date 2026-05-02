@@ -6,11 +6,12 @@ import { RpcException } from '@nestjs/microservices';
 export class RpcCustomExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger('RpcCustomExceptionFilter');
   catch(exception: RpcException, host: ArgumentsHost) {
-    const ctx = host.switchToHttp();
-    this.logger.error('RpcCustomExceptionFilter');
+    const ctx = host.switchToHttp();    
     const response = ctx.getResponse();
 
     const rpcError = exception.getError();
+    this.logger.error('RpcCustomExceptionFilter');
+    // this.logger.error({rpcError});
 
     // console.log({ rpcError });
 
