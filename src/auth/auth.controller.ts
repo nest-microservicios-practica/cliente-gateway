@@ -9,6 +9,11 @@ import { Usuario } from './decorators/usuario.decorator';
 import { Token } from './decorators/token.decorator';
 import { CurrentUsuario } from './interfaces';
 
+//! IMPORTANTE,
+// SI QUEREMOS HACER PROTEGIDA UN ENPOINT O TODO UN CONTROLADOR,
+// ENTONCES COLOCO EL GUARDIAN '@UseGuards(AuthGuard)' A NIVEL DE CONTROLADOR, ASI NO TENGO QUE COLOCARLO EN METODO DEL CONTROLADOR,
+// PERO SI QUIERO PROTEGER SOLO ALGUNOS METODOS DE UN CONTROLADORES,
+// ENTONCES COLOCO EL GUARDIAN '@UseGuards(AuthGuard)' SOLO EN EL METODO DEL CONTROLADOR AL QUE QUIERO QUE SE MUEDA INGRESAR SOLO AUNTENTICADO,
 @Controller('auth')
 export class AuthController {
 
