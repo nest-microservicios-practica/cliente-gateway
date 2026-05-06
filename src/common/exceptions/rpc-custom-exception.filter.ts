@@ -11,7 +11,7 @@ export class RpcCustomExceptionFilter implements ExceptionFilter {
 
     const rpcError = exception.getError();
     this.logger.error('RpcCustomExceptionFilter');
-    // this.logger.error({rpcError});
+    this.logger.error({rpcError});
 
     // console.log({ rpcError });
 
