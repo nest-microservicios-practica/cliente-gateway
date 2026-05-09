@@ -29,7 +29,9 @@ COPY . .
 RUN npm run build
 
 # eliminando las dependencias de desarrollo para reducir el tamaño de la imagen final, y limpiando la cache de npm para reducir aún más el tamaño de la imagen final.
-RUN npm ci -f --only=production && npm cache clean --force
+RUN if [ -f dist/src/main.js ]; then printf "require('./src/main.js');\n" > dist/main.js; fi
+
+RUN npm prune --omit=dev && npm cache clean --force
 
 
 
