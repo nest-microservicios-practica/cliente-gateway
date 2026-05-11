@@ -1,14 +1,20 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { envs } from './config';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { Logger, RequestMethod, ValidationPipe } from '@nestjs/common';
 import { RpcCustomExceptionFilter } from './common/exceptions';
 
 async function bootstrap() {
   const logger = new Logger('main-gateway');
   console.log(envs.natsServers);
   const app = await NestFactory.create(AppModule);
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api', {
+    // en pocas palabras, todas las tienen el prefijo /api, excepto esta ruta que es la que se utiliza para verificar que el portal de clientes está funcionando correctamente,
+    exclude: [{
+      path: '',
+      method: RequestMethod.GET,
+    }]
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({
